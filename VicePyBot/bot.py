@@ -2,61 +2,55 @@ import telebot
 from telebot import types
 import datetime
 
-bot = telebot.TeleBot('Token')
+bot = telebot.TeleBot('token')
 avisos = []
 enquete = []
 results = []
 links = []
 yea = False
-@bot.message_handler(commands=['list'])
+@bot.message_handler(commands=['list', 'help'])
 def funções(message):
-    mens = long_string = ''' ---FUNÇÕES--- 
-    /add. : adicionar um elemento ao quadro de avisos 
-    /limpar. : apaga todo o conteúdo do quadro de avisos 
-    /remover. : remove uma notícia pelo índice no quadro de avisos 
-    /board. : mostra o quadro de avisos 
-    /enquete_criar. : cria uma enquete 
-    /enquete_add_option. : adiciona uma opção(cadidado) a enquete 
-    /enquete_show. : mostra o andamento da enquete 
-    /enquete_votar. : adiciona um voto ao candidato escolhido 
-    /enquete_end. : finaliza a enquete 
-    /links_add. : adiciona um link a lista de links 
-    /links. : mostra todos os links adicionados a lista de links 
-    /links_download. : apresenta o conteudo para download de um arquivo pelo indice da lista de links '''
+    mens = long_string = ''' ---FUNÇÕES---
+/list. ou /help. : lista todos os comandos disponíveis
+/add_news. : adiciona um elemento ao quadro de avisos 
+/clear_board. : apaga todo o conteúdo do quadro de avisos 
+/erase_news. : remove uma notícia pelo índice no quadro de avisos 
+/board. : mostra o quadro de avisos 
+/enq_new. : cria uma enquete 
+/enq_add. : adiciona uma opção à enquete 
+/enq_show. : mostra o andamento da enquete 
+/enq_vote. : adiciona um voto à opção na enquete 
+/enq_end. : finaliza a enquete 
+/links_add. : adiciona um link a lista de links 
+/links. : mostra todos os links adicionados a lista de links 
+/links_download. : apresenta o conteudo para download de um arquivo pelo indice da lista de links '''
     bot.send_message(message.chat.id,mens)
-@bot.message_handler(commands=['start', 'help'])
+@bot.message_handler(commands=['start'])
 def send_welcome(message):
     bot.reply_to(message, "Iniciando projeto Skynet")
 
 
-@bot.message_handler(commands=['add'])
+@bot.message_handler(commands=['add_news'])
 def send_welcome(message):
-    text = message.text.replace('/add', '')
+    text = message.text.replace('/add_news', '')
     d = datetime.datetime.fromtimestamp(message.date).strftime('%d/%m/%Y, %Hh%Mmin')
     if text != '':
-        avisos.append('[' + d + ']: ' + text)
+        avisos.append('[%s]: %s'%(d, text))
 
-@bot.message_handler(commands=['list'])
-def funções(message):
-    bot.send_message(message.chat.id, ' ---FUNÇÕES--- \n /add. : adicionar um elemento ao quadro de avisos \n /limpar. : apaga todo o conteúdo do quadro de avisos \n /remover. : remove uma notícia pelo índice no quadro de avisos \n /board. : mostra o quadro de avisos \n /enquete create. : cria uma enquete \n /enquete add_option. : adiciona uma opção(cadidado) a enquete \n /enquete show. : mostra o andamento da enquete \n /enquete vote. : adiciona um voto ao candidato escolhido \n /enquete end. : finaliza a enquete')
-
-@bot.message_handler(commands=['limpar'])
+@bot.message_handler(commands=['clear_board'])
 def limpar(message):
     del avisos[:]
     bot.send_message(message.chat.id, 'Quadro esvaziado')
 
 
-@bot.message_handler(commands=['remover'])
+@bot.message_handler(commands=['erase_news'])
 def remover(message):
-    check = True;
-    n = message.text.replace('/remover', '')
+    n = message.text.replace('/erase_news', '')
     try:
         idx = int(n)
-        if idx >= len(avisos) or idx<0:
-            check = False
-        if check:
+        if idx < len(avisos) and idx>=0:
             avisos.pop(idx)
-            bot.send_message(message.chat.id, 'Aviso ' + str(idx) + ' removido.')
+            bot.send_message(message.chat.id, 'Aviso %d removido.' % idx)
         else:
             bot.send_message(message.chat.id, 'Entrada invalida, tente entrar com o numero do aviso correto')
     except ValueError:
@@ -69,12 +63,12 @@ def news_board(message):
         bot.send_message(message.chat.id, "Nada novo sob o sol de \'" + message.chat.title + "\'")
     else:
         for i in range(len(avisos)):
-            ans = ans + str(i) + '.' + avisos[i] + '\n'
+            ans = ans + ('%d.%s\n' %(i, avisos[i]))
         bot.send_message(message.chat.id, ans)
 
-@bot.message_handler(commands=['enquete_criar'])
+@bot.message_handler(commands=['enq_new'])
 def create(message):
-    msg = message.text.replace('/enquete_criar', '')
+    msg = message.text.replace('/enq_new', '')
     if len(enquete) != 0:
         ans = 'Encerre a enquete atual para criar uma nova'
     elif msg == '':
@@ -84,20 +78,20 @@ def create(message):
         ans = 'Enquete criada com sucesso!'
     bot.send_message(message.chat.id, ans)
 
-@bot.message_handler(commands=['enquete_add_option'])
+@bot.message_handler(commands=['enq_add'])
 def opcao(message):
-    msg = message.text.replace('/enquete_add_option', '')
+    msg = message.text.replace('/enq_add', '')
     if msg != '':
         ans = entries(message, msg)
     else:
         ans = 'Insira uma opção valida.'
     bot.send_message(message.chat.id, ans)
 
-@bot.message_handler(commands=['enquete_show'])
+@bot.message_handler(commands=['enq_show'])
 def show(message):
     showEnquete(message)
 
-@bot.message_handler(commands=['enquete_votar'])
+@bot.message_handler(commands=['enq_vote'])
 def vote(message):
     try:
         temp = message.text.split()[1]
@@ -105,7 +99,7 @@ def vote(message):
     except Exception as e:
         bot.send_message(message.chat.id, 'Erro, tente novamente')
 
-@bot.message_handler(commands=['enquete_end'])
+@bot.message_handler(commands=['enq_end'])
 def ending(message):
     encerrar(message)
 
@@ -124,7 +118,7 @@ def votar(message, idx):
         idx = int(idx)
         if idx < len(results):
             results[idx] += 1
-            ans = 'Voto na opção ' + str(idx) + ' adicionado com sucesso'
+            ans = ('Voto na opção %d adicionado com sucesso' % idx)
         else:
             ans = 'Opção invalida'
     except ValueError:
@@ -148,13 +142,13 @@ def encerrar(message):
 def resultado():
     ans = ''
     for i in range(len(results)):
-        ans += enquete[i + 1] + '. ' + str(results[i]) + ' votos\n'
+        ans += ('%s: %d votos\n' % (enquete[i + 1], results[i]))
     return ans
 
 def opcoes():
     ans = ''
     for i in range(1, len(enquete)):
-        ans += str(i) + '.' + enquete[i] + '\n'
+        ans += '%d. %s\n' %(i-1,enquete[i])
     return ans
 
 
@@ -171,12 +165,12 @@ def showEnquete(message):
     
 @bot.message_handler(commands=['links'])
 def link(message):
-    ans = str(len(links)) + ' Links\n'
+    ans = '%d Links\n' % len(links)
     for i in range(len(links)):
         if isinstance(links[i], list):
-            ans += str(i) + '- ' + links[i][0] + '\n'
+            ans += '%d. %s\n' %(i,links[i][0])
         else:
-            ans += str(i) + '- ' + links[i] + '\n'
+            ans += '%d. %s\n' %(i,links[i])
     bot.send_message(message.chat.id, ans)
 
 @bot.message_handler(commands=['links_add'])
