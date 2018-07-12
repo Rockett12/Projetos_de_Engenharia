@@ -2,13 +2,28 @@ import telebot
 from telebot import types
 import datetime
 
-bot = telebot.TeleBot('Token')
+bot = telebot.TeleBot('554810315:AAEXepj9p0ePQZBZj3wLXiqRRxaJFDXAVGw')
 avisos = []
 enquete = []
 results = []
 links = []
 yea = False
-
+@bot.message_handler(commands=['list'])
+def funções(message):
+    mens = long_string = ''' ---FUNÇÕES--- \n
+    /add. : adicionar um elemento ao quadro de avisos \n
+    /limpar. : apaga todo o conteúdo do quadro de avisos \n
+    /remover. : remove uma notícia pelo índice no quadro de avisos \n
+    /board. : mostra o quadro de avisos \n
+    /enquete_create. : cria uma enquete \n
+    /enquete_add_option. : adiciona uma opção(cadidado) a enquete \n
+    /enquete_show. : mostra o andamento da enquete \n
+    /enquete_vote. : adiciona um voto ao candidato escolhido \n
+    /enquete_end. : finaliza a enquete \n
+    /links_add. : adiciona um link a lista de links \n
+    /links. : mostra todos os links adicionados a lista de links \n
+    /links_downloand. : apresenta o conteudo para download de um arquivo pelo indice da lista de links \n'''
+    bot.send_message(message.chat.id,mens)
 @bot.message_handler(commands=['start', 'help'])
 def send_welcome(message):
     bot.reply_to(message, "Iniciando projeto Skynet")
