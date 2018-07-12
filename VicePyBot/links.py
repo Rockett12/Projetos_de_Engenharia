@@ -31,7 +31,7 @@ def addition(message):
 def arquivo(message):
     global yea
     if yea:
-        links.append([str(message.Document.file_name) + ' Disponivel para download, use o comando com o devido indice para baixar.', message.Document.file_id])
+        links.append([str(message.document.file_name) + ' Disponivel para download, use o comando com o devido indice para baixar.', message.document.file_id])
         bot.send_message(message.chat.id, 'Adicionado com sucesso!')
         yea = False
 
