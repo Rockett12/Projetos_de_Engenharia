@@ -1,35 +1,42 @@
-@bot.message_handler(commands=['enquete'])
-def enq(message):
-    select = message.text.split()
-    try:
-        tipo = select[1]
-    except Exception as e:
-        bot.send_message(message.chat.id, 'ERROOOU')
-        return
-    if tipo == 'create':
-        try:
-            zerotwo = select[2]
-            enquete.append(zerotwo)
-        except Exception as e:
-            bot.send_message(message.chat.id, 'ERROOOU')
-    elif tipo == 'add_option':
-        try:
-            zerotwo = select[2]
-            entries(message, zerotwo)
-        except Exception as e:
-            bot.send_message(message.chat.id, 'ERROOOU')
-    elif tipo == 'show':
-        showEnquete(message)
-    elif tipo == 'vote':
-        try:
-            zerotwo = select[2]
-            votar(message, zerotwo)
-        except Exception as e:
-            bot.send_message(message.chat.id, 'ERROOOU')
-    elif select[1] == 'end':
-        encerrar(message)
+enquete = []
+results = []
+
+@bot.message_handler(commands=['enquete_criar'])
+def create(message):
+    msg = message.txt.replace('/enquete_criar', '')
+    if len(enquete) != 0:
+        ans = 'Encerre a enquete atual para criar uma nova'
+    elif msg == '':
+        ans = 'Insira o nome da enquete apos o comando e tente novamente.'
+    else
+        enquete.append(msg)
+        ans = 'Enquete criada com sucesso!'
+    bot.send_message(message.chat.id, ans)
+
+@bot.message_handler(commands=['enquete_add_option'])
+def opcao(message):
+    msg = message.text.replace('/enquete_add_option', '')
+    if msg != '':
+        ans = entries(message, msg)
     else:
-        bot.send_message(message.chat.id, 'Comando nao reconhecido, insira um comando valido.')
+        ans = 'Insira uma opção valida.'
+    bot.send_message(message.chat.id, ans)
+
+@bot.message_handler(commands=['enquete_show'])
+def show(message):
+    showEnquete(message)
+
+@bot.message_handler(commands=['enquete_votar'])
+def vote(message):
+    try:
+        temp = message.text.split()[1]
+        votar(message, temp)
+    except Exception as e:
+        bot.send_message(message.chat.id, 'Erro, tente novamente')
+
+@bot.message_handler(commands=['enquete_end'])
+def ending(message):
+    encerrar(message)
 
 def entries(message, s):
     if len(enquete) == 0:
@@ -38,7 +45,7 @@ def entries(message, s):
         enquete.append(s)
         ans = 'Adicionado com sucesso!'
         results.append(0)
-    bot.send_message(message.chat.id, ans)
+    return ans
 
 def votar(message, idx):
     ans = ''
