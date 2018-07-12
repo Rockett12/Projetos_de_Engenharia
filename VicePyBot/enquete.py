@@ -8,7 +8,7 @@ def create(message):
         ans = 'Encerre a enquete atual para criar uma nova'
     elif msg == '':
         ans = 'Insira o nome da enquete apos o comando e tente novamente.'
-    else
+    else:
         enquete.append(msg)
         ans = 'Enquete criada com sucesso!'
     bot.send_message(message.chat.id, ans)
