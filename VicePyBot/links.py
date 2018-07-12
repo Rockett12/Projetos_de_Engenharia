@@ -3,7 +3,7 @@ yea = False
 
 @bot.message_handler(commands=['links'])
 def link(message):
-    ans = str(len(links)) + ' links\n'
+    ans = str(len(links)) + ' Links\n'
     for i in range(len(links)):
         if isinstance(links[i], list):
             ans += str(i) + '- ' + links[i][0] + '\n'
@@ -31,7 +31,7 @@ def addition(message):
 def arquivo(message):
     global yea
     if yea:
-        links.append([str(message.document.file_name) + ' Disponivel para download, use o comando com o devido indice para baixar.', message.document.file_id])
+        links.append([str(message.document.file_name) + ' -Disponivel para download, use o comando com o devido indice para baixar.', message.document.file_id])
         bot.send_message(message.chat.id, 'Adicionado com sucesso!')
         yea = False
 
@@ -46,3 +46,7 @@ def download(message):
             bot.send_message(message.chat.id, 'Algo de errado nao deu certo')
     except Exception as e:
         bot.send_message(message.chat.id, 'Algo de errado nao deu certo')
+        
+@bot.message_handler(commands=['links_clear'])
+def limpar():
+    del links[:]
