@@ -1,6 +1,3 @@
-links = []
-yea = False
-
 @bot.message_handler(commands=['links'])
 def link(message):
     ans = str(len(links)) + ' Links\n'
