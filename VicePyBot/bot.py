@@ -22,7 +22,7 @@ def funções(message):
     /enquete_end. : finaliza a enquete \n
     /links_add. : adiciona um link a lista de links \n
     /links. : mostra todos os links adicionados a lista de links \n
-    /links_downloand. : apresenta o conteudo para download de um arquivo pelo indice da lista de links \n'''
+    /links_download. : apresenta o conteudo para download de um arquivo pelo indice da lista de links \n'''
     bot.send_message(message.chat.id,mens)
 @bot.message_handler(commands=['start', 'help'])
 def send_welcome(message):
