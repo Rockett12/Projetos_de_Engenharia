@@ -13,6 +13,7 @@ def link(message):
 
 @bot.message_handler(commands=['links_add'])
 def addition(message):
+    global yea
     try:
         ans = 'Adicionado com sucesso!'
         msg = message.text.replace('/links_add', '')
@@ -26,8 +27,9 @@ def addition(message):
     bot.send_message(message.chat.id, ans)
 
 
-@bot.message_handler(content_types= 'document')
+@bot.message_handler(content_types= ['document'])
 def arquivo(message):
+    global yea
     if yea:
         links.append([str(message.Document.file_name) + ' Disponivel para download, use o comando com o devido indice para baixar.', message.Document.file_id])
         bot.send_message(message.chat.id, 'Adicionado com sucesso!')
