@@ -48,5 +48,5 @@ def download(message):
         bot.send_message(message.chat.id, 'Algo de errado nao deu certo')
         
 @bot.message_handler(commands=['links_clear'])
-def limpar():
+def limpar(message):
     del links[:]
