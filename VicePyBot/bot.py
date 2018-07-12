@@ -129,7 +129,7 @@ def encerrar(message):
     if len(enquete) == 0:
         ans = 'Sem enquete ativa.'
     else:
-        ans = '--- Opções --- \n'
+        ans = '--- ' + enquete[0] + ' ---\n'
         ans += opcoes()
         ans += '-- RESULTADO FINAL -- \n'
         ans += resultado()
@@ -157,7 +157,7 @@ def showEnquete(message):
         ans = 'Sem enquetes no momento...'
     else:
         ans = '--- ' + enquete[0] + ' ---\n'
-        ans = opcoes()
+        ans += opcoes()
         ans += '\n---Resultado parcial---\n'
         ans += resultado()
     bot.send_message(message.chat.id, ans)
