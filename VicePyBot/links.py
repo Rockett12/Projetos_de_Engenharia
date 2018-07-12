@@ -15,7 +15,7 @@ def link(message):
 def addition(message):
     try:
         ans = 'Adicionado com sucesso!'
-        msg = message.text.replace('\links_add', '')
+        msg = message.text.replace('/links_add', '')
         if msg == '':
             ans = 'Aguardando arquivo...'
             yea = True
